@@ -15,15 +15,15 @@ class VatCounterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataProviderForTestCountTax
-     * @param int $netAmount
+     * @param float $netAmount
      * @param int $vatPercent
-     * @param int $expectedResult
+     * @param float $expectedResult
      */
     public function testCountTax($netAmount, $vatPercent, $expectedResult)
     {
         $result = $this->vatCounter->countTax($netAmount, $vatPercent);
 
-        $this->assertSame(round($expectedResult, 2), round($result, 2));
+        $this->assertEquals($expectedResult, $result, '', 0.01);
     }
 
     public function dataProviderForTestCountTax()
