@@ -23,7 +23,7 @@ class VatCounterTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->vatCounter->countTax($netAmount, $vatPercent);
 
-        $this->assertEquals($expectedResult, $result, '', 0.01);
+        $this->assertEquals($expectedResult, $result, '', 0.001);
     }
 
     public function dataProviderForTestCountTax()
