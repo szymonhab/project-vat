@@ -3,24 +3,26 @@
 /**
  * Class VatCounter - helper for VAT tax counting
  *
- * It uses integer to handle currency, when we use 64 bit PHP version it should be enough for average web application.
- * For larger system, we can use money amount class with various getters/setters which will store currency as integer,
- * and print it in various formats.
+ * It uses float to handle currency.
+ * For larger system, we can use money amount class or some of ready solutions with various getters/setters which will
+ * store currency as decimal.
  *
  * @author Szymon Habela <szymonhab@gmail.com>
  */
 class VatCounter
 {
     /**
-     * @param int $netAmount Net amount in for example: cent, penny or grosze
+     * countTax According to business logic, we perform round-up to second digit after tax calculations.
+     *
+     * @param float $netAmount Net amount
      * @param int $vatPercent Percent of VAT tax
      *
-     * @returns int $tax Tax amount in for example: cent, penny or grosze
+     * @returns float $tax Tax amount
      * @throws Exception
      */
     public function countTax($netAmount, $vatPercent)
     {
-        $netAmount = (int) $netAmount;
+        $netAmount = round((float) $netAmount, 2);
         $vatPercent = (int) $vatPercent;
 
         if ($netAmount < 0) {
@@ -29,9 +31,9 @@ class VatCounter
             throw new \InvalidArgumentException('The vat percent must be in 0-100 range');
         }
 
-        $percentMultiplier = $vatPercent/100;
-        $tax = round($netAmount*$percentMultiplier, 0);
+        // easiest solution - do not divide vatPercent into 100 - then we can use ceil to round-up - because PHP does not have function which round-up to specified digit
+        $tax = ceil($netAmount*$vatPercent);
 
-        return (int) $tax;
+        return ($tax/100);
     }
 }
